@@ -4,6 +4,11 @@
 set -o errexit
 set -o pipefail
 
+if [ "$EUID" -ne 0 ]
+  then echo "Please run the script as root or invoke via sudo."
+  exit
+fi
+
 rm -f run.log && touch run.log
 echo "Updating system."
 apt-get update | tee -a run.log
