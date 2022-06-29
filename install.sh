@@ -28,7 +28,7 @@ useradd unbound | tee -a run.log
 chown -R unbound /usr/local/etc/unbound | tee -a run.log
 wget 'https://raw.githubusercontent.com/buggysolid/unbound-config/main/unbound.conf' -O /usr/local/etc/unbound/unbound.conf | tee -a run.log
 ldconfig | tee -a run.log
-unbound-anchor | tee -a run.log
+unbound-anchor || echo "Unbound-anchor may have failed to update the root.key used to verify DNSSEC signatures." | tee -a run.log
 unbound-control-setup | tee -a run.log
 wget 'https://raw.githubusercontent.com/buggysolid/unbound-config/main/unbound.service' -O /etc/systemd/system/unbound.service | tee -a run.log
 chmod 755 /etc/systemd/system/unbound.service | tee -a run.log
