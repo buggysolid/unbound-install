@@ -10,6 +10,8 @@ Features enabled.
 - Minimal responses
 - DNSSEC
 
+This is the [configuration](https://github.com/buggysolid/unbound-config) for these install scripts.
+
 # Caveat
 
 Running this install script will disable systemd-resolved
