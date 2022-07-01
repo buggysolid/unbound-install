@@ -11,7 +11,7 @@ fi
 
 rm -f run.log && touch run.log
 echo "Updating system."
-yum update -y | tee -a run.log
+yum makecache | tee -a run.log
 echo "Installing dependencies."
 yum install -y sudo openssl openssl-devel expat-devel bison flex libevent-devel libsodium-devel protobuf wget tar make gcc | tee -a run.log
 echo "Grabbing the latest version of Unbound."
@@ -24,7 +24,9 @@ cd "$(ls -d ./*unbound*/)"
 echo "Building Unbound from source."
 make | tee -a run.log
 make install | tee -a run.log
-useradd unbound | tee -a run.log
+if [[ -z "$(getent passwd unbound)" ]]; then
+    useradd unbound | tee -a run.log
+fi
 chown -R unbound /usr/local/etc/unbound | tee -a run.log
 wget 'https://raw.githubusercontent.com/buggysolid/unbound-config/main/unbound.conf' -O /usr/local/etc/unbound/unbound.conf | tee -a run.log
 ldconfig | tee -a run.log
