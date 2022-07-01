@@ -18,7 +18,7 @@ apt-get based systems (Ubuntu/Debian)
 sudo apt-get install git -y
 git clone https://github.com/buggysolid/unbound-install
 cd unbound-install
-./install-apt-get.sh
+sudo ./install-apt-get.sh
 ```
 
 yum/dnf based systems (Centos/Fedora/Redhat)
@@ -27,5 +27,5 @@ yum/dnf based systems (Centos/Fedora/Redhat)
 sudo yum install git -y
 git clone https://github.com/buggysolid/unbound-install
 cd unbound-install
-./install-yum.sh
+sudo ./install-yum.sh
 ```
