@@ -35,8 +35,10 @@ chmod 755 /etc/systemd/system/unbound.service | tee -a run.log
 wget 'https://raw.githubusercontent.com/buggysolid/unbound-config/main/resolv.conf' -O "$HOME/resolv.conf" | tee -a run.log
 mv "$HOME/resolv.conf" /etc/resolv.conf | tee -a run.log
 chmod 744 /etc/resolv.conf | tee -a run.log
-systemctl stop systemd-resolved | tee -a run.log
-systemctl disable systemd-resolved | tee -a run.log
+if [[ $(systemctl is-enabled systemd-resolved) == 'enabled' ]]; then
+    systemctl stop systemd-resolved | tee -a run.log
+    systemctl disable systemd-resolved | tee -a run.log
+fi
 systemctl enable unbound | tee -a run.log
 systemctl restart unbound | tee -a run.log
 systemctl status unbound | tee -a run.log
