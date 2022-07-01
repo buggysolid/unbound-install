@@ -10,6 +10,10 @@ Features enabled.
 - Minimal responses
 - DNSSEC
 
+# Caveat
+
+Running this install script will disable systemd-resolved
+
 # Install
 
 apt-get based systems (Ubuntu/Debian)
