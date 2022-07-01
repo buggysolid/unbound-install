@@ -15,7 +15,7 @@ yum update -y | tee -a run.log
 echo "Installing dependencies."
 yum install -y epel-release
 yum update -y
-yum install -y openssl-devel expat-devel bison flex libevent-devel libsodium-devel protobuf wget tar make gcc | tee -a run.log
+yum install -y sudo openssl-devel expat-devel bison flex libevent-devel libsodium-devel protobuf wget tar make gcc | tee -a run.log
 echo "Grabbing the latest version of Unbound."
 wget 'https://nlnetlabs.nl/downloads/unbound/unbound-latest.tar.gz' | tee -a run.log
 echo "Extracting Unbound."
@@ -30,8 +30,8 @@ useradd unbound | tee -a run.log
 chown -R unbound /usr/local/etc/unbound | tee -a run.log
 wget 'https://raw.githubusercontent.com/buggysolid/unbound-config/main/unbound.conf' -O /usr/local/etc/unbound/unbound.conf | tee -a run.log
 ldconfig | tee -a run.log
-unbound-anchor || echo "Unbound-anchor may have failed to update the root.key used to verify DNSSEC signatures." | tee -a run.log
-unbound-control-setup | tee -a run.log
+sudo -u unbound /usr/local/sbin/unbound-anchor || echo "Unbound-anchor may have failed to update the root.key used to verify DNSSEC signatures." | tee -a run.log
+sudo -u unbound /usr/local/sbin/unbound-control-setup | tee -a run.log
 wget 'https://raw.githubusercontent.com/buggysolid/unbound-config/main/unbound.service' -O /etc/systemd/system/unbound.service | tee -a run.log
 chmod 755 /etc/systemd/system/unbound.service | tee -a run.log
 wget 'https://raw.githubusercontent.com/buggysolid/unbound-config/main/resolv.conf' -O "$HOME/resolv.conf" | tee -a run.log
