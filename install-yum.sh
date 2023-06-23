@@ -12,8 +12,18 @@ fi
 rm -f run.log && touch run.log
 echo "Updating system."
 yum makecache | tee -a run.log
+echo "Building libsodium from source."
+yum install -y clang make autoconf
+LIBSODIUM_STABLE_TARBALL='https://download.libsodium.org/libsodium/releases/libsodium-1.0.18-stable.tar.gz'
+wget "$LIBSODIUM_STABLE_TARBALL" | tee -a run.log
+tar xzf libsodium-1.0.18-stable.tar.gz | tee -a run.log
+cd libsodium-stable
+./configure | tee -a run.log
+make && make check | tee -a run.log
+sudo make install | tee -a run.log
+cd "$HOME"
 echo "Installing dependencies."
-yum install -y sudo openssl openssl-devel expat-devel bison flex libevent-devel libsodium-devel protobuf wget tar make gcc | tee -a run.log
+yum install -y sudo openssl openssl-devel expat-devel bison flex libevent-devel protobuf wget tar make gcc | tee -a run.log
 echo "Grabbing the latest version of Unbound."
 wget 'https://nlnetlabs.nl/downloads/unbound/unbound-latest.tar.gz' | tee -a run.log
 echo "Extracting Unbound."
@@ -22,8 +32,8 @@ echo "Configuring Unbound."
 cd "$(ls -d ./*unbound*/)"
 ./configure --with-pthreads --with-libevent --with-protobuf-c --with-libsodium | tee -a run.log
 echo "Building Unbound from source."
-CPU_COUNT=$(grep 'processor' /proc/cpuinfo | wc -l)
-make -j $CPU_COUNT | tee -a run.log
+CPU_COUNT=$(grep -c 'processor' /proc/cpuinfo)
+make -j "$CPU_COUNT" | tee -a run.log
 make install | tee -a run.log
 if [[ -z "$(getent passwd unbound)" ]]; then
     useradd unbound | tee -a run.log
