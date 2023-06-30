@@ -22,7 +22,7 @@ echo "Configuring Unbound."
 cd "$(ls -d ./*unbound*/)"
 ./configure --with-pthreads --with-libevent --with-protobuf-c --with-libsodium | tee -a run.log
 echo "Building Unbound from source."
-CPU_COUNT=$(grep 'processor' /proc/cpuinfo | wc -l)
+CPU_COUNT=$(grep -c 'processor' /proc/cpuinfo)
 make -j $CPU_COUNT | tee -a run.log
 make install | tee -a run.log
 if [[ -z "$(getent passwd unbound)" ]]; then
